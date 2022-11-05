@@ -6,5 +6,6 @@ router.post("/register", authController.signUp);
 
 router.get("/", userController.getAllUsers);
 router.get("/:id", userController.getUserInfo)
+router.put("/:id", userController.updateBio)
 
 module.exports = router;
