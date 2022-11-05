@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator'); //pour vérifier les mails version big boss
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema(
     {
@@ -41,6 +42,12 @@ const userSchema = new mongoose.Schema(
         timestamps: true
     }
 )
+
+userSchema.pre("save", async function(next) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+});
 
 //userModel fait référence au modèle 'user' et ressemble à userSchema
 const userModel = mongoose.model('user', userSchema)
