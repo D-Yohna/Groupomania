@@ -1,0 +1,47 @@
+const mongoose = require('mongoose');
+const { isEmail } = require('validator'); //pour vérifier les mails version big boss
+
+const userSchema = new mongoose.Schema(
+    {
+        pseudo : {
+            type: String,
+            require: true,
+            minLength: 3,
+            maxLength: 24,
+            unique: true,
+            trim: true //trim supprime les espaces à la fin des input
+        },
+        email : {
+            type: String, 
+            require: true,
+            validate: [isEmail],
+            lowercase: true,
+            trim: true
+        },
+        password : {
+            type: String,
+            require: true,
+            max: 1024
+        },
+        bio : {
+            type: String,
+            max: 256,
+        },
+        followers : {
+            type: [String]
+        },
+        followings : {
+            type: [String]
+        },
+        likes : {
+            type: [String]
+        }
+    },
+    {
+        timestamps: true
+    }
+)
+
+//userModel fait référence au modèle 'user' et ressemble à userSchema
+const userModel = mongoose.model('user', userSchema)
+module.exports = userModel
