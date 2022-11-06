@@ -1,6 +1,13 @@
 //FICHIER DE CONTROLE D'AUTHENTIFICATION 
 
 const userModel = require('../models/user.model.js'); //Importation du modèle utilisateur
+const jwt = require('jsonwebtoken');
+
+const maxAge = 1000 * 60 * 60 * 24 * 3;
+
+const createToken = (id) => {
+    return jwt.sign({id}, process.env.TOKEN_SECRET, {expiresIn : maxAge})
+}
 
 //On exporte la fonction signUp, qui attends une requête en envoie une réponse
 module.exports.signUp = async (req, res) => {
@@ -13,4 +20,22 @@ module.exports.signUp = async (req, res) => {
     catch(err) {
         return res.status(400).send({ err })
     }
+}
+
+module.exports.signIn = async (req, res) => {
+    const {email, password} = req.body
+
+    try {
+        user = await userModel.login(email, password)
+        token = createToken(user._id);
+        res.cookie('jwt', token, {httpOnly: true, maxAge})
+        res.status(200).json({user: user._id})
+    } catch(err) {
+        return res.status(400).json(err);
+    }
+}
+
+module.exports.logout = async (req, res) => {
+    res.cookie('jwt', '', {maxAge: 1})
+    res.redirect('/')
 }
