@@ -7,14 +7,15 @@ const userSchema = new mongoose.Schema(
         pseudo : {
             type: String,
             require: true,
-            minLength: 3,
-            maxLength: 24,
+            minlength: 3,
+            maxlength: 24,
             unique: true,
             trim: true //trim supprime les espaces à la fin des input
         },
         email : {
             type: String, 
             require: true,
+            unique:true,
             validate: [isEmail],
             lowercase: true,
             trim: true
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema(
         password : {
             type: String,
             require: true,
+            minlength: 8,
             max: 1024
         },
         bio : {
@@ -56,9 +58,9 @@ userSchema.statics.login = async function(email, password) {
         if(auth) {
             return user;
         }
-        throw Error('Incorrect Password')
+        throw Error(1)
     }
-    throw Error('Email unknown')
+    throw Error(2)
 }
 
 //userModel fait référence au modèle 'user' et ressemble à userSchema
