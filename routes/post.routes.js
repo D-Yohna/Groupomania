@@ -15,6 +15,7 @@ router.patch("/unlike-post/:id", postController.unlike);
 router.patch("/comment/:id", postController.comment);
 router.patch("/editcomment/:id", postController.updateComment);
 router.patch("/deletecomment/:id", postController.deleteComment);
-router.patch("/likecomment/:id", postController.likeComment)
+router.patch("/likecomment/:id", postController.likeComment);
+router.patch("/unlikecomment/:id", postController.unlikeComment);
 
 module.exports = router;

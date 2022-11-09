@@ -207,6 +207,66 @@ module.exports.deleteComment = async (req, res) => {
 }
 
 module.exports.likeComment = async (req, res) => {
+    if (!ObjectID.isValid(req.params.id)) { 
+        return res.status(400).send("ID unknown :" + req.params.id) 
+    }
 
+    try {
+        await postModel.findOneAndUpdate(
+            {
+                _id : req.params.id,
+                'comments._id' : req.body.commentId
+            },
+            {$addToSet : {
+                'comments.$.likers' : req.body.likerId
+            }},
+            {new: true, upsert: true})
+        .then((docs) => res.send(docs))
+        .catch((err) => {console.log(err); res.status(400).send({ post: err })})
+        await userModel.findByIdAndUpdate(
+            {
+                _id: req.body.likerId
+            },
+            {
+                $addToSet : {
+                    likes : req.body.commentId
+                }
+            },
+            {new: true, upsert: true}
+        )
+        .catch((err) =>  res.status(400).send({ user: err }));
+    } catch(err) {return res.status(400).send(err)}
+}
+
+module.exports.unlikeComment = async (req, res) => {
+    if (!ObjectID.isValid(req.params.id)) { 
+        return res.status(400).send("ID unknown :" + req.params.id) 
+    }
+
+    try {
+        await postModel.findOneAndUpdate(
+            {
+                _id : req.params.id,
+                'comments._id' : req.body.commentId
+            },
+            {$pull : {
+                'comments.$.likers' : req.body.likerId
+            }},
+            {new: true, upsert: true})
+        .then((docs) => res.send(docs))
+        .catch((err) => {console.log(err); res.status(400).send({ post: err })})
+        await userModel.findByIdAndUpdate(
+            {
+                _id: req.body.likerId
+            },
+            {
+                $pull : {
+                    likes : req.body.commentId
+                }
+            },
+            {new: true, upsert: true}
+        )
+        .catch((err) =>  res.status(400).send({ user: err }));
+    } catch(err) {return res.status(400).send(err)}
 }
 
