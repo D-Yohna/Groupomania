@@ -1,6 +1,7 @@
 const postModel = require('../models/post.model.js');
 const userModel = require('../models/user.model.js');
 const ObjectID = require('mongoose').Types.ObjectId;
+const fs = require('fs')
 
 module.exports.getAllPosts = async (req, res) => {
     const posts = await postModel.find().select()
@@ -29,11 +30,30 @@ module.exports.getUserPosts = async (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
-    const {posterId, message, image, video} = req.body 
     if (!ObjectID.isValid(req.body.posterId))
-        { return res.status(400).send("ID unknown :" + req.body.posterId) }
+    { return res.status(400).send("ID unknown :" + req.body.posterId) }
+
+    let image = '';
+    const {posterId, message} = req.body 
+    if(req.file !== null) {
+        if(
+            req.file.mimetype != 'image/jpg' &&
+            req.file.mimetype != 'image/jpeg' &&
+            req.file.mimetype != 'image/png'
+        ) return res.status(400).send('Incorrect file')
+        if(req.file.size > 5000000) return res.status(400).send('Max size') 
+        else {
+            const fileName = req.body.posterId + Date.now() + '.jpg'
+            image = `/uploads/posts/${fileName}`
+            const stream = fs.createReadStream(req.file.path)
+            const writeStream = fs.createWriteStream(`${__dirname}/../client/public${image}`);
+            stream.pipe(writeStream, (err, docs) => {
+                if(err) return res.status(500).send(err)
+            });
+        }
+    }   
     try {
-        const post = await postModel.create({posterId, message, image, video});
+        const post = await postModel.create({posterId, message, image: `.${image}`});
         return res.status(201).json({post: post._id}) 
     }
     catch(err) {

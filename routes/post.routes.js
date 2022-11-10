@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const postController = require('../controllers/post.controller.js')
+const multer  = require('multer')
+const upload = multer({ dest: '../client/public/uploads/posts' })
 
 //CRUD POST
 router.get('/', postController.getAllPosts);
 router.get('/:id', postController.getPost);
 router.get('/all/:id', postController.getUserPosts);
-router.post('/', postController.createPost);
+router.post('/', upload.single('file'), postController.createPost);
 router.put('/:id', postController.updatePost);
 router.delete('/:id', postController.deletePost);
 router.patch("/like-post/:id", postController.like);
