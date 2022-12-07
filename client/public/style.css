@@ -1,0 +1,283 @@
+body, .maincolor {
+    background-color: #212529;
+}
+
+p, b, h1, h2, h3, h4, h5, h6, label, .white{
+    color:white
+}
+
+.success {
+    color:lightgreen;
+    padding-top:5px;
+}
+
+.log {
+    border-radius:10px;
+}
+
+.hover:hover {
+    cursor:pointer;
+}
+
+.pLink:hover {
+    cursor:pointer;
+    text-decoration: underline;
+}
+
+.text-little {
+    font-size: .75rem
+}
+
+#navbar {
+    height:80px;
+    background-color: #425058
+}
+
+.Navcolor {
+    background-color:#425058;
+}
+
+.MainPic{
+    margin:16px 30px;
+    width:100px;
+    height:100px;
+    overflow:hidden;
+    border-radius:100%;
+}
+
+.row>.MainPic {
+    padding: 0px;
+}
+
+.PostPic{
+    margin-top:6px;
+    width:60px;
+    height:60px;
+    overflow:hidden;
+    border-radius:100%;
+}
+
+.row>.PostPic {
+    padding: 0px;
+}
+
+#bio {
+    text-align:center;
+}
+
+#pbio {
+    padding: 10px;
+    max-height:50%;
+    word-wrap: break-word;
+    background-color: antiquewhite;
+    overflow:hidden;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: end;
+}
+
+#addPic-container{
+    display: flex;
+    justify-content: end;
+}
+
+#addPicture {
+    width:40px;
+    height:auto;
+    cursor:pointer;
+    margin-top:-6px;
+}
+
+#fileInput {
+    display: none;
+}
+
+.PublishButton {
+    width: 80px;
+}
+
+#picture-container {
+    margin: 10px 0 10px 125px;;
+    width:250px;
+    height:250px;
+    overflow:hidden;
+    border: 2px solid #000;
+    border-radius:100%;
+}
+
+.profilePicture{
+    width:100%;
+    height:auto;
+}
+
+.row>.profilePicture{
+    padding:0px;
+}
+
+.follows {
+    width:48%;
+    margin:2px 2px;
+}
+
+#updateProfile {
+    height:400px;
+}
+
+.likeButton {
+    margin-bottom:5px;
+}
+
+.UpdComm-container {
+    display:flex;
+    flex-direction: column;
+}
+
+.ValidateButton {
+    display:flex;
+    justify-content:end;
+}
+
+#UpdComm {
+    width:80px;
+}
+
+.modal {
+    border: 1px solid #FFF;
+}
+
+.Post-container {
+    border: solid 2px #FFF;
+    border-radius:10px;
+}
+
+.publish-container {
+    margin: 30px 0;
+}
+
+.followButton {
+    width:40px;
+    height: auto;
+}
+.postOption-container {
+    display:flex;
+    flex-direction: row;
+    justify-content:end;
+}
+
+.LogModal {
+    margin: 0 3px;
+}
+
+
+@media screen and (max-width: 800px) {
+    h1,h2,h3,h4,h5,h6 {
+        font-size: 1rem;
+    }
+
+    p, b, label{
+        font-size:.5rem;
+    }
+
+    .MainPic {
+        width: 50px;
+        height: 50px;
+        margin: 12px 0px;
+    }
+
+    .PostPic {
+        width:30px;
+        height:30px;
+    }
+
+    .publish-row {
+        margin-right:0px;
+        margin-left:0px;
+    }
+
+    #Publishtext {
+        font-size: x-small;
+        margin-left: -10px;
+    }
+
+    .PublishButton {
+        width:25%;
+        height:26px;
+        font-size: x-small;
+    }
+
+    .followButton {
+        width: 15px;
+        height: auto;
+    }
+
+    .postOption-container {
+        display:flex;
+        flex-direction: row;
+    }
+
+    .postOption{
+        width: 50%;
+        height: auto;
+        font-size: .25rem;
+    }
+
+    .icon  {
+        width: 25px;
+        height: auto;
+    }
+
+    .commInput, .Input {
+        height: 15px;
+        font-size: .5rem;
+    }
+
+    .CommPublish {
+        width: 30px;
+        height: auto;
+        font-size: .25rem;
+    }
+
+    .publish-container {
+        margin: 10px 0 
+    }
+
+    .LikeComm {
+        width: 40px;
+        height: auto;
+        font-size:.25rem;
+    }
+
+    .pLink {
+        font-size:.25rem;
+    }
+
+    .NavUser {
+        font-size:.75rem;
+    }
+
+    .LogModal {
+        width:60px;
+        font-size:.25rem;
+        margin: 55px 0;
+    }
+
+    .Button {
+        width:50px;
+        font-size:.25rem;
+        text-align:center;
+    }
+
+    .logList {
+        padding-left: 0px;
+    }
+
+    #picture-container {
+        margin: 5px auto;
+        width: 150px;
+        height: 150px;
+    }
+
+}

@@ -19,7 +19,7 @@ module.exports.signUp = async (req, res) => {
     }
     catch(err) {
         const errors = signUpErrors(err);
-        return res.status(400).send({ errors })
+        return res.status(200).send({ errors })
     }
 }
 
@@ -33,11 +33,11 @@ module.exports.signIn = async (req, res) => {
         res.status(200).json({user: user._id})
     } catch(err) {
         const errors = signInErrors(err)
-        return res.status(400).send({ errors });
+        return res.status(200).send({ errors });
     }
 }
 
 module.exports.logout = async (req, res) => {
     res.cookie('jwt', '', {maxAge: 1})
-    res.redirect('/')
+    res.status(200).send('déconnexion réussie')
 }

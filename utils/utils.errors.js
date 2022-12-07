@@ -25,13 +25,11 @@ module.exports.signUpErrors = (err) => {
 
 module.exports.signInErrors = (err) => {
     let errors = {email : '', password : ''}
-    console.log(err)
     if (err == 'Error: 1'){
         errors.password = "Mot de passe incorrect"
     }
     if (err == 'Error: 2') {
         errors.email = "Email inconnu"
     }
-
     return errors
 }

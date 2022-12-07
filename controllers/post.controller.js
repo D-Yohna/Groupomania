@@ -5,6 +5,9 @@ const fs = require('fs')
 
 module.exports.getAllPosts = async (req, res) => {
     const posts = await postModel.find().select()
+    posts.sort(function (a, b) {
+        return new Date(b.createdAt) - new Date(a.createdAt)
+    })
     return res.status(200).json(posts);
 }
 
@@ -33,9 +36,9 @@ module.exports.createPost = async (req, res) => {
     if (!ObjectID.isValid(req.body.posterId))
     { return res.status(400).send("ID unknown :" + req.body.posterId) }
 
-    let image = '';
+    let picture = '';
     const {posterId, message} = req.body 
-    if(req.file !== null) {
+    if(req.file !== null && req.file !== undefined) {
         if(
             req.file.mimetype != 'image/jpg' &&
             req.file.mimetype != 'image/jpeg' &&
@@ -44,21 +47,23 @@ module.exports.createPost = async (req, res) => {
         if(req.file.size > 5000000) return res.status(400).send('Max size') 
         else {
             const fileName = req.body.posterId + Date.now() + '.jpg'
-            image = `/uploads/posts/${fileName}`
+            picture = `/uploads/posts/${fileName}`
             const stream = fs.createReadStream(req.file.path)
-            const writeStream = fs.createWriteStream(`${__dirname}/../client/public${image}`);
+            const writeStream = fs.createWriteStream(`${__dirname}/../client/public${picture}`);
             stream.pipe(writeStream, (err, docs) => {
                 if(err) return res.status(500).send(err)
             });
+            picture = `./uploads/posts/${fileName}`
         }
-    }   
+    }
     try {
-        const post = await postModel.create({posterId, message, image: `.${image}`});
+        const post = await postModel.create({posterId, message, picture});
         return res.status(201).json({post: post._id}) 
     }
     catch(err) {
         return res.status(400).send({ err })
-    }
+    }   
+    
 }
 
 module.exports.updatePost = async (req, res) => {
@@ -86,8 +91,8 @@ module.exports.deletePost = async (req, res) => {
     if (!ObjectID.isValid(req.params.id))
         { return res.status(400).send("ID unknown :" + req.params.id) }
     
-    try { 
-        await postModel.remove({_id : req.params.id}).exec();
+    try {
+        await postModel.deleteOne({_id : req.params.id}).exec();
         return res.status(200).send("Post successfully deleted")
     } catch(err) {return res.status(500).json(err)}
 }
@@ -164,6 +169,7 @@ module.exports.comment = async (req, res) => {
                     comments : {
                         commenterId : req.body.commenterId,
                         commenterPseudo : user.pseudo,
+                        commenterPic: user.picture,
                         text: req.body.text,
                         timestamp : new Date().getTime()
                     }
@@ -186,18 +192,20 @@ module.exports.updateComment = async (req, res) => {
                 _id : req.params.id,
                 'comments._id' : req.body.commentId
             },
-            {$set : {
-                'comments.$.text' : req.body.text
-            }},
+            {
+                $set : {
+                    'comments.$.text' : req.body.text
+                }
+            },
             {new: true, upsert: true}
         )
         .then((docs) => {
             return res.status(200).send(docs)
         })
         .catch((err) => {
-            return res.status(404).send('Comment not found' + err)
+            return res.status(404).send('Comment not found')
         })
-    } catch(err) {console.log(err); return res.status(400).json({ err })}
+    } catch(err) {return res.status(400).json({ err })}
 }
 
 module.exports.deleteComment = async (req, res) => {

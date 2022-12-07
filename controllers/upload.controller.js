@@ -7,12 +7,12 @@ module.exports.uploadProfile = async (req, res) => {
             req.file.mimetype != 'image/jpg' &&
             req.file.mimetype != 'image/jpeg' &&
             req.file.mimetype != 'image/png'
-        ) return res.status(400).send('Incorrect file')
-        if(req.file.size > 5000000) return res.status(400).send('Max size') 
+        ) return res.status(400).send('Incorrect file type')
+        if(req.file.size > 5000000) return res.status(400).send('File is too big') 
         else {
             const fileName = req.body.name + '.jpg';
             const stream = fs.createReadStream(req.file.path)
-            const writeStream = fs.createWriteStream(`${__dirname}/../client/public/uploads/profile/${fileName}`);
+            const writeStream = fs.createWriteStream(`${__dirname}/../client/public/uploads/profil/${fileName}`);
             stream.pipe(writeStream, (err, docs) => {
                 if(err) return res.status(500).send(err)
             });
@@ -22,14 +22,14 @@ module.exports.uploadProfile = async (req, res) => {
                 },
                 {
                     $set: {
-                        picture: `./uploads/profile/${fileName}`
+                        picture: `./uploads/profil/${fileName}`
                     }
                 },
                 {new:true, upsert: true})
             .then((docs) => {return res.send(docs)})
-            .catch((err) => res.status(400).send({ post: err }))
+            .catch((err) => res.status(400).send("l'upload a échoué"))
         }
         } catch(err) {
-            return console.log(err)
+            return res.status(500).send("l'upload a échoué")
     }
 }

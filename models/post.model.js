@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
             maxlength : 2048,
             trim: true,
         },
-        image : {
+        picture : {
             type: String,
         },
         likers : {
@@ -23,6 +23,7 @@ const postSchema = new mongoose.Schema(
             type: [{
                 commenterId: String,
                 commenterPseudo: String,
+                commenterPic: String,
                 text: String,
                 likers: [String],
                 timestamp: Number

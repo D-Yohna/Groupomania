@@ -35,8 +35,8 @@ module.exports.updateBio = async (req, res) => {
             })
             .select("-password")
             .then((docs) => res.send(docs))
-            .catch((err) => res.status(500).send({ message: err }))
-    } catch(err) {console.log(err)}
+            .catch((err) => res.status(400).send({ message: err }))
+    } catch(err) {res.status(500).send('Error 500')}
 };
 
 module.exports.deleteUser = async (req, res) => {
@@ -57,7 +57,7 @@ module.exports.follow = async (req, res) => {
             //Add to the following list
             await userModel.findByIdAndUpdate(
                 {_id : req.params.id},
-                {$addToSet : {followings : req.body.idToFollow}},
+                {$addToSet : {following : req.body.idToFollow}},
                 {new: true, upsert: true}
             )
             .then((docs) => res.send(docs))
@@ -82,7 +82,7 @@ module.exports.unfollow = async (req, res) => {
             //Remove to the following list
             await userModel.findByIdAndUpdate(
                 {_id : req.params.id},
-                {$pull : {followings : req.body.idToUnfollow}},
+                {$pull : {following : req.body.idToUnfollow}},
                 {new: true, upsert: true}
             )
             .then((docs) => res.send(docs))
